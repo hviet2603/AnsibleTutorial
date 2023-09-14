@@ -2,3 +2,5 @@ ansible all -m apt -a update_cache=true --become --ask-become-pas
 ansible all -m apt -a name=vim-nox --become --ask-become-pass
 ansible all -m gather_facts --limit user@192.168.0.107
 ansible-playbook --ask-become-pass install_apache.yml
+ansible-playbook --list-tags site.yaml
+ansible-playbook --tags "samba" --ask-become-pass site.yaml 
