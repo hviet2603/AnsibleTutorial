@@ -1,0 +1,34 @@
+---
+- hosts: all
+  become: true
+  pre_tasks:
+  - name: install update
+    tags: always
+    apt:
+      update_cache: yes
+    when: ansible_distribution == "Ubuntu"
+
+- hosts: all
+  become: true
+  tasks:
+  - name: create jarvis user
+    tags: always
+    user:
+      name: jarvis
+      groups: root
+      shell: /bin/bash
+  
+  - name: add ssh key for jarvis
+    tags: always
+    authorized_key:
+      user: jarvis
+      key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHCRFPPNd8JLuFXzCwy56yQPyF6Xbt1X5F7yc40Jw+zG Ansible"
+  
+  - name: add sudoers file for jarvis
+    tags: always
+    copy:
+      src: sudoer_jarvis
+      dest: /etc/sudoers.d/jarvis
+      owner: root
+      group: root
+      mode: 0440
