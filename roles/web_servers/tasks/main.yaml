@@ -1,0 +1,40 @@
+- name: install apache2 and php
+  tags: apache,apache2,ubuntu
+  package:
+    name:
+      - "{{ apache_package }}"
+      - "{{ php_package }}"
+    state: latest
+
+- name: start apache
+  tags: apache,ubuntu,apache2
+  service:
+    name: apache2
+    state: started
+    enabled: yes
+  when: ansible_distribution == "Ubuntu"
+
+- name: change e-mail address for admin
+  tags: apache,ubuntu,apache2
+  lineinfile:
+    path: /etc/apache2/sites-available/000-default.conf
+    regexp: "^ServerAdmin"
+    line: ServerAdmin somebody@somewhere.net
+  when: ansible_distribution == "Ubuntu"
+  register: apache2
+
+- name: restart apache2
+  tags: apache,ubuntu,apache2
+  service:
+    name: apache2
+    state: restarted
+  when: apache2.changed
+
+- name: copy default html file for site
+  tags: apache,apache2,ubuntu
+  copy:
+    src: default_site.html
+    dest: /var/www/html/index.html
+    owner: root
+    group: root
+    mode: 0644

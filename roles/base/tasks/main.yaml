@@ -1,0 +1,5 @@
+- name: add ssh key for jarvis
+  tags: always
+  authorized_key:
+    user: jarvis
+    key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHCRFPPNd8JLuFXzCwy56yQPyF6Xbt1X5F7yc40Jw+zG Ansible"
