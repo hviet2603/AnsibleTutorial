@@ -21,14 +21,7 @@
     regexp: "^ServerAdmin"
     line: ServerAdmin somebody@somewhere.net
   when: ansible_distribution == "Ubuntu"
-  register: apache2
-
-- name: restart apache2
-  tags: apache,ubuntu,apache2
-  service:
-    name: apache2
-    state: restarted
-  when: apache2.changed
+  notify: restart_apache
 
 - name: copy default html file for site
   tags: apache,apache2,ubuntu
